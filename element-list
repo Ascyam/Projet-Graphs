@@ -1,0 +1,16 @@
+org.insa.graphes.model
+org.insa.graphs.algorithm
+org.insa.graphs.algorithm.carpooling
+org.insa.graphs.algorithm.packageswitch
+org.insa.graphs.algorithm.shortestpath
+org.insa.graphs.algorithm.utils
+org.insa.graphs.algorithm.weakconnectivity
+org.insa.graphs.gui
+org.insa.graphs.gui.drawing
+org.insa.graphs.gui.drawing.components
+org.insa.graphs.gui.drawing.overlays
+org.insa.graphs.gui.observers
+org.insa.graphs.gui.simple
+org.insa.graphs.gui.utils
+org.insa.graphs.model
+org.insa.graphs.model.io
