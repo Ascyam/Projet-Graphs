@@ -55,6 +55,7 @@ public class Launch {
 
         // TODO: Read the graph.
         final Graph graph = null;
+       
 
         // Create the drawing:
         final Drawing drawing = createDrawing();
