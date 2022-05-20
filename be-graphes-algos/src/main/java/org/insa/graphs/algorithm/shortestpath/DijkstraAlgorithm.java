@@ -106,8 +106,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         /*
         for (Node node : graph.getNodes()){
             map.put(node, new Label(node,Float.MAX_VALUE,null));
-        } */
+ */
         //fin
+
 
         Label min = map.get(origine);
         min.setCost(0);
