@@ -62,7 +62,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         }
 
         public int compareTo(Label other){
-            return Double.compare(cout, other.getCost());
+            return Double.compare(this.getTotalCost(), other.getTotalCost());
+        }
+        
+        public double getTotalCost() {
+        	return this.getCost();
         }
 
     }
@@ -72,6 +76,14 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
         
+    }
+    public void InitLabels(Graph graph, HashMap<Node, Label> map, Node destination) {
+    	//debut (mettre dans une fonction)
+// commencer ici
+        for (Node node : graph.getNodes()){
+            map.put(node, new Label(node,Float.MAX_VALUE,null));
+        }
+        //fin    	
     }
 
     @Override
@@ -86,12 +98,16 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         notifyOriginProcessed(origine);
 
         if (origine==destination) return new ShortestPathSolution (data, Status.OPTIMAL, new Path(graph, origine));
+        
         BinaryHeap<Label> labels = new BinaryHeap<Label>();
         HashMap<Node, Label> map = new HashMap<Node, Label>();
-
+        InitLabels(graph, map, destination);
+        
+        /*
         for (Node node : graph.getNodes()){
-            map.put(node,Label(node,Float.MAX_VALUE,node));
-        }
+            map.put(node, new Label(node,Float.MAX_VALUE,null));
+        } */
+        //fin
 
         Label min = map.get(origine);
         min.setCost(0);
@@ -101,11 +117,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         ShortestPathSolution solution = null;
         // TODO:
         while(true){
+        	System.out.println("Test");
             min =labels.deleteMin();
             nodeMin = min.getSommet();
             min.setMarque();
             notifyNodeMarked(nodeMin);
-            if (nodeMin==destination) break;
+            if (nodeMin.equals(destination)) break;
             for(Arc arc : nodeMin.getSuccessors()){
                 if(!data.isAllowed(arc)) continue;
                 Node currentDestination = arc.getDestination();
@@ -113,8 +130,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 if(!currentlabel.getMarque()){
                     double cost = min.getCost() + data.getCost(arc);
                     if(currentlabel.getCost() > cost){
-                        notifyNodeReach(currentDestination);
-                        labels.remove(currentlabel);
+                        notifyNodeReached(currentDestination);
+                        if(currentlabel.getCost() != Float.MAX_VALUE) {labels.remove(currentlabel);}
                         currentlabel.setCost(cost);
                         labels.insert(currentlabel);
                         currentlabel.setPere(arc);
@@ -125,17 +142,24 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             if (labels.isEmpty()) return new ShortestPathSolution (data, Status.INFEASIBLE);
 
         }
-        notifyDestinationReach(destination);
-        ArrayList<Node> shortestpath = new ArrayList<Node>();
-        shortestpath.add(destination);
+        notifyDestinationReached(destination);
+        ArrayList<Arc> shortestpath = new ArrayList<Arc>();
+        //shortestpath.add();
         Arc pere;
-        while((pere = shortestpath.get(shortestpath.get(shortestpath.size()-1)).getPere()) != origine){
+        /*while((pere = shortestpath.get(shortestpath.get(shortestpath.size()-1)).getPere()) != origine){
             shortestpath.add(pere);
+        } */
+        Node currentNode = destination;
+        while(currentNode != origine) {
+        	Label labelcourant = map.get(currentNode);
+        	shortestpath.add(labelcourant.getPere());
+        	currentNode = shortestpath.get(shortestpath.size()-1).getOrigin();
         }
-        shortestpath.add(origine);
+        //shortestpath.add(origine);
         Collections.reverse(shortestpath);
         //Path pluscourtchemin = Path.createShortestPathFromNodes(graph, shortestpath);
-        solution = new ShortestPathSolution(data, Status.OPTIMAL, pluscourtchemin);
+        //solution = new ShortestPathSolution(data, Status.OPTIMAL, pluscourtchemin);
+        solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, shortestpath));
 
 
 
