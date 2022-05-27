@@ -73,6 +73,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
    public void InitLabels(Graph graph, HashMap<Node, Label> map, Node destination) {
 	   for (Node node : graph.getNodes()){
            map.put(node, new LabelAStar(node,Float.MAX_VALUE,null, destination));
+           
        }
 	   
    }

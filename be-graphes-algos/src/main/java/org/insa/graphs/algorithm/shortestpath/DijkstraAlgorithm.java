@@ -118,7 +118,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         ShortestPathSolution solution = null;
         // TODO:
         while(true){
-        	System.out.println("Test");
             min =labels.deleteMin();
             nodeMin = min.getSommet();
             min.setMarque();
